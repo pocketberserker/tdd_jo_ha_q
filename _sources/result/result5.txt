@@ -1,0 +1,13 @@
+﻿Condition not satisfied:
+
+kvs.get('ccc') == 'ddd'
+|   |          |
+|   bbb        false
+|              3 differences (0% similarity)
+|              (bbb)
+|              (ddd)
+kvs.KeyValueStore@2efe918f
+
+at kvs.KeyValueStoreSpec.空のKVSにput('ccc','ddd')するとget('ccc')で'ddd'が取得できる(KeyValueStoreSpec.groovy:29)
+
+Process finished with exit code -1

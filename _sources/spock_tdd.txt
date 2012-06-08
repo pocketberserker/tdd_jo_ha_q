@@ -1,0 +1,480 @@
+﻿===========
+TDD 序
+===========
+
+序として選んだのは「テストコードをGroovyで、製品コードをJavaで書く」というものです。
+
+テスティングフレームワークにはSpockを使用します。また、実行環境にはJava SE 7、Groovy 1.8.5を用います。
+
+KeyValueStoreSpec.groovyを作成
+=================================
+
+まずはspecファイルを作成します。
+
+.. literalinclude:: spec/spec1.groovy
+  :language: groovy
+
+まだテストコードは何も書いていませんが、実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+なお、IntelliJ IDEAを使用しているのであれば、テスト実行結果はこのような形になります。
+(実行結果のスクリーンショット)
+
+最初のテストを書く
+====================
+
+一番最初のテストコードを書きましょう。
+
+givenブロックに設定作業、whenブロックに実行、thenブロックに期待する応答を記述していきます。whenとthenは必ずペアで記述することになります。
+
+.. literalinclude:: spec/spec2.groovy
+  :language: groovy
+
+空のkvsが与えられ、'aaa'と'bbb'のペアをputしたとき、'aaa'でgetすると'bbb'が返ってくることを確認するテストを書きました。
+実行してみましょう。
+
+.. literalinclude:: result/result1.txt
+  :language: text
+
+KeyValueStoreクラスがないと怒られました。確かに、まだ作っていないですね。作りましょう。
+
+KeyValueStoreクラスの作成
+==============================
+
+.. literalinclude:: product/product1.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/result2.txt
+  :language: text
+
+テストはまだ落ちたままです。KeyValueStoreにはput(String,String)なシグネチャのメソッドはないよ、と言われました。putを作りましょう。
+
+putメソッド作成
+=================
+
+.. literalinclude:: product/product2.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/result3.txt
+  :language: text
+
+今度はKeyvalueStoreにgetメソッドはないよと言われました。これも作りましょう。
+
+getメソッド作成
+==================
+
+.. literalinclude:: product/product3.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/result4.txt
+  :language: text
+
+'bbb'が返ってきてほしいところにtextが返ってきました。では、テストに通るように実装しましょう。
+
+getの仮実装
+=============
+
+テストコードのテストをやっておきたいので、仮実装でテストが通るかどうか確認します。
+
+.. literalinclude:: product/product4.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+仮実装してテストに通ったので、これでテストのテストが完了しました。安心してテスト実行できそうです。
+
+三角測量
+===============
+
+このままだと実装が安易過ぎるので、別のデータを使ったテストを追加しましょう。
+
+.. literalinclude:: spec/spec3.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/result5.txt
+  :language: text
+
+もちろん、仮実装で書いたコードではテストに通りません。そろそろきちんと実装しましょう。
+
+明白な実装
+==============
+
+やや一足飛びですが、Mapを利用してkeyとvalueのペアを記憶し、指定のkeyに対応するvalueを取得して返すようにしましょう。
+
+.. literalinclude:: product/product5.java
+  :language: java
+
+GroovyのMapリテラルはLinkedHashMapになるので、製品コード側もLinkedHashMapがいいな、ということでLinkedHashMapを選択しています。
+
+実行しましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+テストに通りました。
+
+テストコードのリファクタリング
+================================
+
+作成した2つのテストメソッドを見比べてみると、putやget、そして期待値のデータが異なるだけで構造は重複しています。
+parameterized testの機能を使ってリファクタリングしましょう。
+
+Spockではwhere句で変数名とパラメータを指定できます。
+(今回は変更後のコードのみ記載します)
+
+.. literalinclude:: spec/spec4.groovy
+  :language: groovy
+
+重複もなくなり、随分とすっきりしましたね。実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+put対象のkeyがtextなら例外発生
+================================
+
+今回の仕様では、put対象のkeyがtextだと例外が発生してほしいようです。まずはテストを書きます。
+
+.. literalinclude:: spec/spec5.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/result6.txt
+  :language: text
+
+IllegalArgumentExceptionを期待していたのに、何も例外が投げられなかったためテストに失敗しました。期待通りですね。
+
+それでは、このテストに通るように変更しましょう。
+
+.. literalinclude:: product/product6.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+setupメソッドの抽出
+=======================
+
+kvsのインスタンス作成部分が重複していますね。各テストの実行前に毎回実行されるsetupメソッドに抽出して重複を排除しましょう。
+
+.. literalinclude:: spec/spec5after.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+getにtextを渡すと例外発生
+===========================
+
+putと同様に、getに渡すkeyがtextだと例外が発生してほしいようです。
+
+.. literalinclude:: spec/spec6.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/result7.txt
+  :language: text
+
+IllegalArgumentExceptionが投げられなかったためテストに失敗しました。テストに通るように変更しましょう。
+
+.. literalinclude:: product/product7.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+kvsに登録されていないkeyでgetを実行するとtextが返る
+=======================================================
+
+この仕様に関しては、LinkedHashMapのgetメソッドが同様の動作をするので特に不安はありません。
+しかし、テストコードに仕様書としての側面も持たせたいので、今回はテストを書いておきましょう。
+
+.. literalinclude:: spec/spec7.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+予想通り、テストが成功しました。
+
+既に登録されているkeyに対してputした場合はvalueのみ更新
+=========================================================
+
+これもLinkedHashMapのputメソッドが同様の動作をしますが、テストを書いておきましょう。
+
+.. literalinclude:: spec/spec8.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+deleteのテスト
+=================
+
+ここからは、kvsから指定のkeyとvalueを削除するdeleteメソッドを作成していきます。
+まずはテストからなのですが、今回は複数のデータでテストを行うことが前提なので、あらかじめparameterized testを使って書きます。
+
+.. literalinclude:: spec/spec9.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/result8.txt
+  :language: text
+
+deleteがないのでエラーが発生しています。実装してしまいましょう。
+
+deleteの実装
+======================
+
+LinkedHashMap.removeを利用すれば仕様を満たすので、一気に実装してしまいます。
+
+.. literalinclude:: product/product8.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+他のデータでも仕様どおり動くか試したいので、データを追加してみます。
+
+.. literalinclude:: spec/spec10.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+dumpの実装
+==============
+
+kvsに登録されているkeyとvalueの一覧を文字列で返すdumpメソッドを実装します。
+
+dumpのテスト
+--------------
+
+どのような形で出力するかは仕様に書かれていないので、今回はこちらで"{key1:value1}{key2:value2} ..."となるように実装したいと思います。
+
+まずテストを書きましょう。
+
+.. literalinclude:: spec/spec11.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/result9.txt
+  :language: text
+
+GroovyのObjectクラスに存在するdumpメソッドが文字列を返したようですが、期待値と一致しないためテストが失敗しました。
+
+一歩が大きいので小さくする
+-----------------------------
+
+ここでふと、いきなりdumpの実装は大きすぎた気がしてきたので、メソッドを細かくすることにしました。
+
+dumpのテストには@Ignoreアノテーションをつけてひとまず横に置いておき、keyとvalueを渡すと{key:value}という文字列が返るdebugPrintメソッドを作りましょう。まずはテストコードです。
+
+.. literalinclude:: spec/spec12.groovy
+  :language: groovy
+
+Spockでは、実行と期待値を一つの式に記述するのが場合、thenよりもexpectブロックの利用が好まれます。
+
+実行しましょう。
+
+.. literalinclude:: result/result10.txt
+  :language: text
+
+dumpのテストが無視されていること、debugPrintメソッドは存在しないことがわかります。
+
+debugPrintの実装
+---------------------
+
+簡単そうなので一気に実装してしまいましょう。
+
+.. literalinclude:: product/product9.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/result11.txt
+  :language: text
+
+現バージョン(1.8.5)のGroovyではprivateなメソッドに簡単にアクセス可能なので、テストは成功します。
+ただし、この機能は一種のバグなので今後のバージョンでは使えなくなる可能性
+もあります。
+ですので、本機能はローカルな範囲での一時利用に限定して使うのが無難です。
+例えば、今回のような使い捨てテストコードを書くとか、リファクタリングする際などです。
+
+dumpのテストに戻る
+--------------------------
+
+それではdumpに戻りましょう。dumpのテストにつけていた@IgnoreとdebugPrintのテストを削除します。
+
+.. literalinclude:: spec/spec13.groovy
+  :language: groovy
+
+これでdumpのテストに失敗した状態まで戻りました。
+
+改めて、dumpの実装
+----------------------
+
+Map.entrySetメソッドで取得したSetの各key-valueに対して、をdebugPrintで文字列を取得すれば実装できそうですね。
+
+.. literalinclude:: product/product10.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+無事にテストが通りました。
+
+不安なので複数登録されている場合もテスト
+---------------------------------------------
+
+key-valueが1つ登録されている場合のdumpテストを、2つ登録されている場合のテストに変更します。
+
+.. literalinclude:: spec/spec14.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+debugPrintの処遇
+---------------------
+
+debugPrintにメソッドのインライン化を適用すべきかどうかが悩ましいところです。
+
+現状、いつフォーマットが変更されるかわからないのでこのままにしておきますが、フォーマットが変更されないと判明した時点でdumpメソッドに展開してしまいましょう。
+
+一度に複数のkey-valueを登録したい
+=======================================
+
+一度に複数のkey-valueを登録できるように、引数にMapを渡せるputメソッドを作成しましょう。
+
+GroovyではLinkedHashMapのリテラルが[key1:value1,key2:value2]といった形で用意されているので、Mapを用いたテストを簡単に書くことができます。
+
+.. literalinclude:: spec/spec15.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/result12.txt
+  :language: text
+
+Mapを引数にとるputが存在しないと言われています。予想通りですね。
+
+put(Map)の実装
+================
+
+今回もMap.entrySetとfor文を使えば実装できそうですね。
+
+.. literalinclude:: product/product11.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+複数登録する際のkeyに一つでもtextが存在する場合は一切登録せず例外発生
+===========================================================================
+
+空のkvsに対して2番目以降のkeyにtextを指定し、例外が投げられかつdump結果が空文字列ならば仕様を満たしそうですね。
+これをテストに落としていきましょう。
+
+Mapリテラルのkeyやvalueにそのまま変数やtextを記述するとシンボル扱いされてしまうので、変数やtextは丸括弧で括るように気をつけてください。
+
+.. literalinclude:: spec/spec16.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/result13.txt
+  :language: text
+
+例外は発生しましたが、最初のkey-valueがkvsに登録されてしまっています。
+どうやら、put(Map)内で使用しているput(String,String)メソッドが投げた例外によってthrown部分のテストが成功したようですね。
+
+登録する前に例外を投げるようにする
+=====================================
+
+各key-valueをkvsへ登録する前に、渡されたMapデータの中身を確認する必要がありそうですね。
+
+.. literalinclude:: product/product12.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+keyとvalueを任意の型で扱えるようにしたい
+=============================================
+
+最後に、Genericを使ってkeyやvalueで任意の型を扱えるようにしましょう。
+今回はいきなり製品コードを変更していきます。
+
+.. literalinclude:: product/product13.java
+  :language: java
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+既存のテストを一切壊さずに変更ができました。
+Groovyは動的型付けな言語なので、先ほどのような型の変更の際にも柔軟に対応可能です。
+
+他の型でもテストしてみよう
+===============================
+
+試しに、いくつかのparameterized testのデータを書き換えてみましょう。
+
+.. literalinclude:: spec/spec17.groovy
+  :language: groovy
+
+実行してみましょう。
+
+.. literalinclude:: result/success.txt
+  :language: text
+
+問題なく動作しているようですね。
+
+序、完
+==============
+
+序では、テストコードと製品コードを同一実行環境上で動作する別言語で書いてみました。いかがでしたでしょうか？
+GroovyはJavaに近いコードが書けるので、それほど違和感なく読むことが可能だったのではないでしょうか。
+
+それでは、次回はTDD 破です。

@@ -1,0 +1,30 @@
+import java.util.Map;
+import java.util.LinkedHashMap;
+
+public class KeyValueStore {
+
+    private final Map<String,String> store = new LinkedHashMap<>();
+
+		public void put(String key, String value) {
+		    if(key == null) throw new IllegalArgumentException("key‚ªnull‚Å‚µ‚½");
+		    store.put(key,value);
+		}
+
+		public String get(String key) {
+		    if(key == null) throw new IllegalArgumentException("key‚ªnull‚Å‚µ‚½");
+		    return store.get(key);
+		}
+
+		public void delete(String key) {
+		    store.remove(key);
+		}																		    
++		private String toString(String key, String value) {
++		    StringBuilder result = new StringBuilder();
++		    result.append("{");
++		    result.append(key);
++		    result.append(":");
++		    result.append(value);
++		    result.append("}");
++		    return result.toString();
++		}
+}

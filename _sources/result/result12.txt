@@ -1,0 +1,5 @@
+﻿groovy.lang.MissingMethodException: No signature of method: KeyValueStore.put() is applicable for argument types: (java.util.LinkedHashMap) values: [[aaa:bbb, ccc:ddd]]
+Possible solutions: putAt(java.lang.String, java.lang.Object), findAll(), put(java.lang.String, java.lang.String), getAt(java.lang.String), findAll(groovy.lang.Closure)
+  at KeyValueStoreSpec.KVSに複数のkeyvalueペアを一度に登録できる(KeyValueStoreSpec.groovy:123)
+
+Process finished with exit code -1

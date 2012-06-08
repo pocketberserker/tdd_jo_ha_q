@@ -1,0 +1,2170 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>TDD 序 &mdash; tdd_jo_ha_q 2012.02.17 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2012.02.17',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="tdd_jo_ha_q 2012.02.17 documentation" href="index.html" />
+    <link rel="prev" title="概要" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="introduction.html" title="概要"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="index.html">tdd_jo_ha_q 2012.02.17 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tdd">
+<h1>TDD 序<a class="headerlink" href="#tdd" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>序として選んだのは「テストコードをGroovyで、製品コードをJavaで書く」というものです。</p>
+<p>テスティングフレームワークにはSpockを使用します。また、実行環境にはJava SE 7、Groovy 1.8.5を用います。</p>
+<div class="section" id="keyvaluestorespec-groovy">
+<h2>KeyValueStoreSpec.groovyを作成<a class="headerlink" href="#keyvaluestorespec-groovy" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>まずはspecファイルを作成します。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="o">+</span><span class="kn">package</span> <span class="n">xutp</span>
+<span class="o">+</span>
+<span class="o">+</span><span class="kn">import</span> <span class="nn">spock.lang.*</span>
+<span class="o">+</span>
+<span class="o">+</span><span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+}</span>
+</pre></div>
+</div>
+<p>まだテストコードは何も書いていませんが、実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+<p>なお、IntelliJ IDEAを使用しているのであれば、テスト実行結果はこのような形になります。
+(実行結果のスクリーンショット)</p>
+</div>
+<div class="section" id="id1">
+<h2>最初のテストを書く<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>一番最初のテストコードを書きましょう。</p>
+<p>givenブロックに設定作業、whenブロックに実行、thenブロックに期待する応答を記述していきます。whenとthenは必ずペアで記述することになります。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;空のKVSにput(&#39;aaa&#39;,&#39;bbb&#39;)するとget(&#39;aaa&#39;)で&#39;bbb&#39;が取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">given:</span>
+<span class="o">+</span>       <span class="kt">def</span> <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;bbb&#39;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>空のkvsが与えられ、&#8217;aaa&#8217;と&#8217;bbb&#8217;のペアをputしたとき、&#8217;aaa&#8217;でgetすると&#8217;bbb&#8217;が返ってくることを確認するテストを書きました。
+実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>unable to resolve class KeyValueStore
+</pre></div>
+</div>
+<p>KeyValueStoreクラスがないと怒られました。確かに、まだ作っていないですね。作りましょう。</p>
+</div>
+<div class="section" id="keyvaluestore">
+<h2>KeyValueStoreクラスの作成<a class="headerlink" href="#keyvaluestore" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-java"><div class="highlight"><pre><span class="o">+</span><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+<span class="o">+</span>
+<span class="o">+</span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>groovy.lang.MissingMethodException: No signature of method: KeyValueStore.put() is applicable for argument types: (java.lang.String, java.lang.String) values: [aaa, bbb]
+Possible solutions: putAt(java.lang.String, java.lang.Object), wait(), dump(), any(), find(), grep()
+  at KeyValueStoreSpec.空のKVSにput(&#39;aaa&#39;,&#39;bbb&#39;)するとget(&#39;aaa&#39;)で&#39;bbb&#39;が取得できる(KeyValueStoreSpec.groovy:11)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>テストはまだ落ちたままです。KeyValueStoreにはput(String,String)なシグネチャのメソッドはないよ、と言われました。putを作りましょう。</p>
+</div>
+<div class="section" id="put">
+<h2>putメソッド作成<a class="headerlink" href="#put" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+<span class="o">+</span>    <span class="kd">public</span> <span class="kt">void</span> <span class="n">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>groovy.lang.MissingMethodException: No signature of method: KeyValueStore.get() is applicable for argument types: (java.lang.String) values: [aaa]
+Possible solutions: getAt(java.lang.String), grep(), put(java.lang.String, java.lang.String), grep(java.lang.Object), wait(), any()
+  at KeyValueStoreSpec.空のKVSにput(&#39;aaa&#39;,&#39;bbb&#39;)するとget(&#39;aaa&#39;)で&#39;bbb&#39;が取得できる(KeyValueStoreSpec.groovy:14)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>今度はKeyvalueStoreにgetメソッドはないよと言われました。これも作りましょう。</p>
+</div>
+<div class="section" id="get">
+<h2>getメソッド作成<a class="headerlink" href="#get" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+<span class="o">+</span>
+<span class="o">+</span>   <span class="kd">public</span> <span class="n">String</span> <span class="n">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Condition not satisfied:
+
+kvs.get(&#39;aaa&#39;) == &#39;bbb&#39;
+|   |          |
+|   null       false
+KeyValueStore@99a6440
+
+at KeyValueStoreSpec.空のKVSにput(&#39;aaa&#39;,&#39;bbb&#39;)するとget(&#39;aaa&#39;)で&#39;bbb&#39;が取得できる(KeyValueStoreSpec.groovy:14)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>&#8216;bbb&#8217;が返ってきてほしいところにtextが返ってきました。では、テストに通るように実装しましょう。</p>
+</div>
+<div class="section" id="id2">
+<h2>getの仮実装<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>テストコードのテストをやっておきたいので、仮実装でテストが通るかどうか確認します。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">-</span>       <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">+</span>       <span class="k">return</span> <span class="s">&quot;bbb&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+<p>仮実装してテストに通ったので、これでテストのテストが完了しました。安心してテスト実行できそうです。</p>
+</div>
+<div class="section" id="id3">
+<h2>三角測量<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>このままだと実装が安易過ぎるので、別のデータを使ったテストを追加しましょう。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにput(&#39;aaa&#39;,&#39;bbb&#39;)するとget(&#39;aaa&#39;)で&#39;bbb&#39;が取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="kt">def</span> <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;bbb&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;空のKVSにput(&#39;ccc&#39;,&#39;ddd&#39;)するとget(&#39;ccc&#39;)で&#39;ddd&#39;が取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">given:</span>
+<span class="o">+</span>       <span class="kt">def</span> <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;ccc&#39;</span><span class="o">,</span><span class="s1">&#39;ddd&#39;</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ddd&#39;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Condition not satisfied:
+
+kvs.get(&#39;ccc&#39;) == &#39;ddd&#39;
+|   |          |
+|   bbb        false
+|              3 differences (0% similarity)
+|              (bbb)
+|              (ddd)
+kvs.KeyValueStore@2efe918f
+
+at kvs.KeyValueStoreSpec.空のKVSにput(&#39;ccc&#39;,&#39;ddd&#39;)するとget(&#39;ccc&#39;)で&#39;ddd&#39;が取得できる(KeyValueStoreSpec.groovy:29)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>もちろん、仮実装で書いたコードではテストに通りません。そろそろきちんと実装しましょう。</p>
+</div>
+<div class="section" id="id4">
+<h2>明白な実装<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>やや一足飛びですが、Mapを利用してkeyとvalueのペアを記憶し、指定のkeyに対応するvalueを取得して返すようにしましょう。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="nl">xutp:</span>
+
+<span class="o">+</span><span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="o">+</span><span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+<span class="o">+</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+   
+<span class="o">+</span>   <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+      
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">-</span>       <span class="k">return</span> <span class="s">&quot;bbb&quot;</span><span class="o">;</span>
+<span class="o">+</span>       <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>GroovyのMapリテラルはLinkedHashMapになるので、製品コード側もLinkedHashMapがいいな、ということでLinkedHashMapを選択しています。</p>
+<p>実行しましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+<p>テストに通りました。</p>
+</div>
+<div class="section" id="id5">
+<h2>テストコードのリファクタリング<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>作成した2つのテストメソッドを見比べてみると、putやget、そして期待値のデータが異なるだけで構造は重複しています。
+parameterized testの機能を使ってリファクタリングしましょう。</p>
+<p>Spockではwhere句で変数名とパラメータを指定できます。
+(今回は変更後のコードのみ記載します)</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="kt">def</span> <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>重複もなくなり、随分とすっきりしましたね。実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="putkeytext">
+<h2>put対象のkeyがtextなら例外発生<a class="headerlink" href="#putkeytext" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>今回の仕様では、put対象のkeyがtextだと例外が発生してほしいようです。まずはテストを書きます。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="kt">def</span> <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">given:</span>
+<span class="o">+</span>       <span class="kt">def</span> <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Expected exception java.lang.IllegalArgumentException, but no exception was thrown
+  at spock.lang.Specification.thrown(Specification.java:232)
+  at KeyValueStoreSpec.KVSにnullのkeyをputすると例外が発生する(KeyValueStoreSpec.groovy:32)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>IllegalArgumentExceptionを期待していたのに、何も例外が投げられなかったためテストに失敗しました。期待通りですね。</p>
+<p>それでは、このテストに通るように変更しましょう。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup">
+<h2>setupメソッドの抽出<a class="headerlink" href="#setup" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>kvsのインスタンス作成部分が重複していますね。各テストの実行前に毎回実行されるsetupメソッドに抽出して重複を排除しましょう。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="n">kvs</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="n">setup</span><span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+<span class="o">+</span>   <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+<span class="o">-</span>       <span class="nl">given:</span>
+<span class="o">-</span>       <span class="kt">def</span> <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+<span class="o">-</span>       <span class="nl">given:</span>
+<span class="o">-</span>       <span class="kt">def</span> <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span> 
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+ 
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="gettext">
+<h2>getにtextを渡すと例外発生<a class="headerlink" href="#gettext" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>putと同様に、getに渡すkeyがtextだと例外が発生してほしいようです。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+				
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">given:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Expected exception java.lang.IllegalArgumentException, but no exception was thrown
+  at spock.lang.Specification.thrown(Specification.java:232)
+  at KeyValueStoreSpec.KVSに対してnullでgetを行うと例外が発生する(KeyValueStoreSpec.groovy:45)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>IllegalArgumentExceptionが投げられなかったためテストに失敗しました。テストに通るように変更しましょう。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="kvskeygettext">
+<h2>kvsに登録されていないkeyでgetを実行するとtextが返る<a class="headerlink" href="#kvskeygettext" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>この仕様に関しては、LinkedHashMapのgetメソッドが同様の動作をするので特に不安はありません。
+しかし、テストコードに仕様書としての側面も持たせたいので、今回はテストを書いておきましょう。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+<p>予想通り、テストが成功しました。</p>
+</div>
+<div class="section" id="keyputvalue">
+<h2>既に登録されているkeyに対してputした場合はvalueのみ更新<a class="headerlink" href="#keyputvalue" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>これもLinkedHashMapのputメソッドが同様の動作をしますが、テストを書いておきましょう。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">given:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="delete">
+<h2>deleteのテスト<a class="headerlink" href="#delete" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ここからは、kvsから指定のkeyとvalueを削除するdeleteメソッドを作成していきます。
+まずはテストからなのですが、今回は複数のデータでテストを行うことが前提なので、あらかじめparameterized testを使って書きます。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+        
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">given:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+<span class="o">+</span>       
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+<span class="o">+</span>        
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+<span class="o">+</span>       
+<span class="o">+</span>       <span class="nl">where:</span>
+<span class="o">+</span>       <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+<span class="o">+</span>       <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>groovy.lang.MissingMethodException: No signature of method: KeyValueStore.delete() is applicable for argument types: (java.lang.String) values: [aaa]
+Possible solutions: get(java.lang.String), getAt(java.lang.String), every(), sleep(long), every(groovy.lang.Closure), split(groovy.lang.Closure)
+  at KeyValueStoreSpec.既にKVSに存在するkeyをdeleteするとkeyとvalueのペアがKVSから削除される(KeyValueStoreSpec.groovy:68)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>deleteがないのでエラーが発生しています。実装してしまいましょう。</p>
+</div>
+<div class="section" id="id6">
+<h2>deleteの実装<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>LinkedHashMap.removeを利用すれば仕様を満たすので、一気に実装してしまいます。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">+</span>
+<span class="o">+</span>   <span class="kd">public</span> <span class="kt">void</span> <span class="n">delete</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="n">store</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+<p>他のデータでも仕様どおり動くか試したいので、データを追加してみます。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+    
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+        
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+<span class="o">+</span>       <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="dump">
+<h2>dumpの実装<a class="headerlink" href="#dump" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>kvsに登録されているkeyとvalueの一覧を文字列で返すdumpメソッドを実装します。</p>
+<div class="section" id="id7">
+<h3>dumpのテスト<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>どのような形で出力するかは仕様に書かれていないので、今回はこちらで&#8221;{key1:value1}{key2:value2} ...&#8221;となるように実装したいと思います。</p>
+<p>まずテストを書きましょう。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+        
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;KVSに登録されているkey-valueを文字列で取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;{aaa:bbb}&quot;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Condition not satisfied:
+
+kvs.dump() == &quot;{aaa:bbb}&quot;
+|   |      |
+|   |      false
+|   |      33 differences (17% similarity)
+|   |      (&lt;KeyV)a(lueStore@66557791 store=[)aa(a):bbb(]&gt;)
+|   |      ({----)a(-------------------------)aa(-):bbb(}-)
+|   &lt;KeyValueStore@66557791 store=[aaa:bbb]&gt;
+KeyValueStore@66557791
+
+at KeyValueStoreSpec.KVSに登録されているkey-valueを文字列で取得できる(KeyValueStoreSpec.groovy:103)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>GroovyのObjectクラスに存在するdumpメソッドが文字列を返したようですが、期待値と一致しないためテストが失敗しました。</p>
+</div>
+<div class="section" id="id8">
+<h3>一歩が大きいので小さくする<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>ここでふと、いきなりdumpの実装は大きすぎた気がしてきたので、メソッドを細かくすることにしました。</p>
+<p>dumpのテストには&#64;Ignoreアノテーションをつけてひとまず横に置いておき、keyとvalueを渡すと{key:value}という文字列が返るdebugPrintメソッドを作りましょう。まずはテストコードです。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+  
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+        
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+        
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+        
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="nd">@Ignore</span>
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されているkey-value一覧を文字列で取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;keyとvalueをdebugPrintに渡すと{key:value}の形で文字列を返す&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">expect:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">debugPrint</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}&#39;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Spockでは、実行と期待値を一つの式に記述するのが場合、thenよりもexpectブロックの利用が好まれます。</p>
+<p>実行しましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Test &#39;.KeyValueStoreSpec.KVSに登録されているkey-value一覧を文字列で取得できる&#39; ignored
+
+groovy.lang.MissingMethodException: No signature of method: KeyValueStore.debugPrint() is applicable for argument types: (java.lang.String, java.lang.String) values: [aaa, bbb]
+  at KeyValueStoreSpec.keyとvalueをdebugPrintに渡すと{key:value}の形で文字列を返す(KeyValueStoreSpec.groovy:98)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>dumpのテストが無視されていること、debugPrintメソッドは存在しないことがわかります。</p>
+</div>
+<div class="section" id="debugprint">
+<h3>debugPrintの実装<a class="headerlink" href="#debugprint" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>簡単そうなので一気に実装してしまいましょう。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">delete</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>                                       
+<span class="o">+</span>   <span class="kd">private</span> <span class="n">String</span> <span class="n">debugPrint</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+<span class="o">+</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;{&quot;</span><span class="o">);</span>
+<span class="o">+</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+<span class="o">+</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;:&quot;</span><span class="o">);</span>
+<span class="o">+</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+<span class="o">+</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;}&quot;</span><span class="o">);</span>
+<span class="o">+</span>       <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Test &#39;.KeyValueStoreSpec.KVSに登録されているkey-valueを文字列で取得できる&#39; ignored
+
+Process finished with exit code 0
+</pre></div>
+</div>
+<p>現バージョン(1.8.5)のGroovyではprivateなメソッドに簡単にアクセス可能なので、テストは成功します。
+ただし、この機能は一種のバグなので今後のバージョンでは使えなくなる可能性
+もあります。
+ですので、本機能はローカルな範囲での一時利用に限定して使うのが無難です。
+例えば、今回のような使い捨てテストコードを書くとか、リファクタリングする際などです。</p>
+</div>
+<div class="section" id="id9">
+<h3>dumpのテストに戻る<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>それではdumpに戻りましょう。dumpのテストにつけていた&#64;IgnoreとdebugPrintのテストを削除します。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+        
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+        
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">-</span>   <span class="nd">@Ignore</span>
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されているkey-valueを文字列で取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">-</span>   <span class="kt">def</span> <span class="s2">&quot;keyとvalueをdebugPrintに渡すと{key:value}の形で文字列を返す&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">-</span>
+<span class="o">-</span>       <span class="nl">expect:</span>
+<span class="o">-</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">debugPrint</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}&#39;</span>
+<span class="o">-</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>これでdumpのテストに失敗した状態まで戻りました。</p>
+</div>
+<div class="section" id="id10">
+<h3>改めて、dumpの実装<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Map.entrySetメソッドで取得したSetの各key-valueに対して、をdebugPrintで文字列を取得すれば実装できそうですね。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">delete</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="nf">debugPrint</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;{&quot;</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;:&quot;</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;}&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kd">public</span> <span class="n">String</span> <span class="n">dump</span><span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+<span class="o">+</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">store</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+<span class="o">+</span>           <span class="n">String</span> <span class="n">keyvalue</span> <span class="o">=</span> <span class="n">debugPrint</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">pair</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+<span class="o">+</span>           <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">keyvalue</span><span class="o">);</span>
+<span class="o">+</span>       <span class="o">}</span>
+<span class="o">+</span>       <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+<p>無事にテストが通りました。</p>
+</div>
+<div class="section" id="id11">
+<h3>不安なので複数登録されている場合もテスト<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>key-valueが1つ登録されている場合のdumpテストを、2つ登録されている場合のテストに変更します。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+        
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されているkey-valueを文字列で取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;ccc&#39;</span><span class="o">,</span><span class="s1">&#39;ddd&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+<span class="o">-</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}&#39;</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}{ccc:ddd}&#39;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="id12">
+<h3>debugPrintの処遇<a class="headerlink" href="#id12" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>debugPrintにメソッドのインライン化を適用すべきかどうかが悩ましいところです。</p>
+<p>現状、いつフォーマットが変更されるかわからないのでこのままにしておきますが、フォーマットが変更されないと判明した時点でdumpメソッドに展開してしまいましょう。</p>
+</div>
+</div>
+<div class="section" id="key-value">
+<h2>一度に複数のkey-valueを登録したい<a class="headerlink" href="#key-value" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>一度に複数のkey-valueを登録できるように、引数にMapを渡せるputメソッドを作成しましょう。</p>
+<p>GroovyではLinkedHashMapのリテラルが[key1:value1,key2:value2]といった形で用意されているので、Mapを用いたテストを簡単に書くことができます。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+        
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+        
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+        
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されているkey-valueを文字列で取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;ccc&#39;</span><span class="o">,</span><span class="s1">&#39;ddd&#39;</span><span class="o">)</span>
+        
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}{ccc:ddd}&#39;</span>
+      
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;KVSに複数のkeyvalueペアを一度に登録できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">([</span><span class="s1">&#39;aaa&#39;</span><span class="o">:</span><span class="s1">&#39;bbb&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">:</span><span class="s1">&#39;ddd&#39;</span><span class="o">])</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">where:</span>
+<span class="o">+</span>       <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+<span class="o">+</span>       <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+<span class="o">+</span>       <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>groovy.lang.MissingMethodException: No signature of method: KeyValueStore.put() is applicable for argument types: (java.util.LinkedHashMap) values: [[aaa:bbb, ccc:ddd]]
+Possible solutions: putAt(java.lang.String, java.lang.Object), findAll(), put(java.lang.String, java.lang.String), getAt(java.lang.String), findAll(groovy.lang.Closure)
+  at KeyValueStoreSpec.KVSに複数のkeyvalueペアを一度に登録できる(KeyValueStoreSpec.groovy:123)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>Mapを引数にとるputが存在しないと言われています。予想通りですね。</p>
+</div>
+<div class="section" id="put-map">
+<h2>put(Map)の実装<a class="headerlink" href="#put-map" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>今回もMap.entrySetとfor文を使えば実装できそうですね。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">delete</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="nf">debugPrint</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;{&quot;</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;:&quot;</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;}&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">dump</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">store</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">keyvalue</span> <span class="o">=</span> <span class="n">debugPrint</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">pair</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">keyvalue</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kd">public</span> <span class="kt">void</span> <span class="n">put</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">kv</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">kv</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+<span class="o">+</span>           <span class="n">put</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span><span class="n">pair</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+<span class="o">+</span>       <span class="o">}</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="keytext">
+<h2>複数登録する際のkeyに一つでもtextが存在する場合は一切登録せず例外発生<a class="headerlink" href="#keytext" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>空のkvsに対して2番目以降のkeyにtextを指定し、例外が投げられかつdump結果が空文字列ならば仕様を満たしそうですね。
+これをテストに落としていきましょう。</p>
+<p>Mapリテラルのkeyやvalueにそのまま変数やtextを記述するとシンボル扱いされてしまうので、変数やtextは丸括弧で括るように気をつけてください。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+ 
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されているkey-valueを文字列で取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;ccc&#39;</span><span class="o">,</span><span class="s1">&#39;ddd&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}{ccc:ddd}&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに複数のkeyvalueペアを一度に登録できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">([</span><span class="s1">&#39;aaa&#39;</span><span class="o">:</span><span class="s1">&#39;bbb&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">:</span><span class="s1">&#39;ddd&#39;</span><span class="o">])</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+        
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+        <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+    <span class="o">}</span>
+
+<span class="o">+</span>   <span class="kt">def</span> <span class="s2">&quot;複数keyvalueペアのkeyに一つでもnullが含まれていたらKVSを更新せず例外を発生させる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">when:</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">([</span><span class="s1">&#39;aaa&#39;</span><span class="o">:</span><span class="s1">&#39;bbb&#39;</span><span class="o">,(</span><span class="kc">null</span><span class="o">):</span><span class="s1">&#39;ddd&#39;</span><span class="o">])</span>
+<span class="o">+</span>
+<span class="o">+</span>       <span class="nl">then:</span>
+<span class="o">+</span>       <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span>
+<span class="o">+</span>   <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Condition not satisfied:
+
+kvs.dump() == &#39;&#39;
+|   |      |
+|   |      false
+|   |      9 differences (0% similarity)
+|   |      ({aaa:bbb})
+|   |      (---------)
+|   {aaa:bbb}
+KeyValueStore@5dc598b
+
+  at KeyValueStoreSpec.複数keyvalueペアのkeyに一つでもnullが含まれていたらKVSを更新せず例外を発生させる(KeyValueStoreSpec.groovy:140)
+
+Process finished with exit code -1
+</pre></div>
+</div>
+<p>例外は発生しましたが、最初のkey-valueがkvsに登録されてしまっています。
+どうやら、put(Map)内で使用しているput(String,String)メソッドが投げた例外によってthrown部分のテストが成功したようですね。</p>
+</div>
+<div class="section" id="id13">
+<h2>登録する前に例外を投げるようにする<a class="headerlink" href="#id13" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>各key-valueをkvsへ登録する前に、渡されたMapデータの中身を確認する必要がありそうですね。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">delete</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="nf">debugPrint</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;{&quot;</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;:&quot;</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;}&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">dump</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">store</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">keyvalue</span> <span class="o">=</span> <span class="n">debugPrint</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">pair</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">keyvalue</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">kv</span><span class="o">)</span> <span class="o">{</span>
+
+<span class="o">+</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">kv</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+<span class="o">+</span>           <span class="k">if</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyにnullが含まれています&quot;</span><span class="o">);</span>
+<span class="o">+</span>       <span class="o">}</span>
+
+        <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">kv</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">put</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span><span class="n">pair</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="keyvalue">
+<h2>keyとvalueを任意の型で扱えるようにしたい<a class="headerlink" href="#keyvalue" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>最後に、Genericを使ってkeyやvalueで任意の型を扱えるようにしましょう。
+今回はいきなり製品コードを変更していきます。</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+
+<span class="o">-</span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">{</span>
+<span class="o">+</span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">KeyValueStore</span> <span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
+
+<span class="o">-</span>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+<span class="o">+</span>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">store</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+
+<span class="o">-</span>    <span class="kd">public</span> <span class="kt">void</span> <span class="n">put</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>    <span class="kd">public</span> <span class="kt">void</span> <span class="n">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">-</span>    <span class="kd">public</span> <span class="n">String</span> <span class="n">get</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>    <span class="kd">public</span> <span class="n">V</span> <span class="n">get</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyがnullでした&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">-</span>    <span class="kd">public</span> <span class="kt">void</span> <span class="n">delete</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>    <span class="kd">public</span> <span class="kt">void</span> <span class="n">delete</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">store</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">-</span>   <span class="kd">private</span> <span class="n">String</span> <span class="n">debugPrint</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">,</span> <span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>   <span class="kd">private</span> <span class="n">String</span> <span class="n">debugPrint</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;{&quot;</span><span class="o">);</span>
+<span class="o">-</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+<span class="o">+</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;:&quot;</span><span class="o">);</span>
+<span class="o">-</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+<span class="o">+</span>       <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;}&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">dump</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">StringBuilder</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+<span class="o">-</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">store</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">store</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">keyvalue</span> <span class="o">=</span> <span class="n">debugPrint</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span> <span class="n">pair</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+            <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">keyvalue</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+
+<span class="o">-</span>   <span class="kd">public</span> <span class="kt">void</span> <span class="n">put</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">kv</span><span class="o">)</span> <span class="o">{</span>
+<span class="o">+</span>   <span class="kd">public</span> <span class="kt">void</span> <span class="n">put</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">kv</span><span class="o">)</span> <span class="o">{</span>
+
+<span class="o">-</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">kv</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">kv</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;keyにnullが含まれています&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+
+<span class="o">-</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">kv</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+<span class="o">+</span>       <span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">pair</span> <span class="o">:</span> <span class="n">kv</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">put</span><span class="o">(</span><span class="n">pair</span><span class="o">.</span><span class="na">getKey</span><span class="o">(),</span><span class="n">pair</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+<p>既存のテストを一切壊さずに変更ができました。
+Groovyは動的型付けな言語なので、先ほどのような型の変更の際にも柔軟に対応可能です。</p>
+</div>
+<div class="section" id="id14">
+<h2>他の型でもテストしてみよう<a class="headerlink" href="#id14" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>試しに、いくつかのparameterized testのデータを書き換えてみましょう。</p>
+<div class="highlight-groovy"><div class="highlight"><pre><span class="kn">package</span> <span class="n">xutp</span>
+
+<span class="kn">import</span> <span class="nn">spock.lang.*</span>
+
+<span class="kd">class</span> <span class="nc">KeyValueStoreSpec</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+
+    <span class="kt">def</span> <span class="n">kvs</span>
+
+    <span class="kt">def</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">kvs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">KeyValueStore</span><span class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+<span class="o">-</span>       <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+<span class="o">+</span>       <span class="mi">1</span>     <span class="o">|</span> <span class="mf">2.5</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSにnullのkeyをputすると例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="s1">&#39;null&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに対してnullでgetを行うと例外が発生する&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されていないkeyでgetを行うとnullが返る&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;other&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyをputするとvalueのみ更新される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;ccc&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;既にKVSに存在するkeyについてdeleteを行うとkeyとvalueのペアがKVSから削除される&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">given:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span><span class="n">value</span><span class="o">)</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span>
+ 
+        <span class="nl">where:</span>
+        <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span>
+        <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+<span class="o">-</span>       <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+<span class="o">+</span>       <span class="mi">1</span>     <span class="o">|</span> <span class="mf">2.5</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに登録されているkey-valueを文字列で取得できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;aaa&#39;</span><span class="o">,</span><span class="s1">&#39;bbb&#39;</span><span class="o">)</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s1">&#39;ccc&#39;</span><span class="o">,</span><span class="s1">&#39;ddd&#39;</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;{aaa:bbb}{ccc:ddd}&#39;</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;KVSに複数のkeyvalueペアを一度に登録できる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+
+        <span class="nl">when:</span>
+<span class="o">-</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">([(</span><span class="s1">&#39;aaa&#39;</span><span class="o">):(</span><span class="s1">&#39;bbb&#39;</span><span class="o">),(</span><span class="s1">&#39;ccc&#39;</span><span class="o">):(</span><span class="s1">&#39;ddd&#39;</span><span class="o">)])</span>
+<span class="o">+</span>       <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">map</span><span class="o">)</span>
+
+        <span class="nl">then:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">value</span>
+
+        <span class="nl">where:</span>
+<span class="o">-</span>       <span class="n">ket</span>   <span class="o">|</span> <span class="n">value</span>
+<span class="o">-</span>       <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+<span class="o">-</span>       <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+<span class="o">+</span>       <span class="n">map</span>                       <span class="o">|</span> <span class="n">key</span>   <span class="o">|</span> <span class="n">value</span> 
+<span class="o">+</span>       <span class="o">[</span><span class="s1">&#39;aaa&#39;</span><span class="o">:</span><span class="s1">&#39;bbb&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">:</span><span class="s1">&#39;ddd&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="s1">&#39;aaa&#39;</span> <span class="o">|</span> <span class="s1">&#39;bbb&#39;</span>
+<span class="o">+</span>       <span class="o">[</span><span class="s1">&#39;aaa&#39;</span><span class="o">:</span><span class="s1">&#39;bbb&#39;</span><span class="o">,</span><span class="s1">&#39;ccc&#39;</span><span class="o">:</span><span class="s1">&#39;ddd&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="s1">&#39;ccc&#39;</span> <span class="o">|</span> <span class="s1">&#39;ddd&#39;</span>
+<span class="o">+</span>       <span class="o">[</span><span class="mi">1</span><span class="o">:</span><span class="mf">2.5</span><span class="o">,</span><span class="mi">10</span><span class="o">:</span><span class="mf">30.0</span><span class="o">]</span>           <span class="o">|</span> <span class="mi">1</span>     <span class="o">|</span> <span class="mf">2.5</span>
+<span class="o">+</span>       <span class="o">[</span><span class="mi">1</span><span class="o">:</span><span class="mf">2.5</span><span class="o">,</span><span class="mi">10</span><span class="o">:</span><span class="mf">30.0</span><span class="o">]</span>           <span class="o">|</span> <span class="mi">10</span>    <span class="o">|</span> <span class="mf">30.0</span>
+    <span class="o">}</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;複数keyvalueペアのkeyに一つでもnullが含まれていたらKVSを更新せず例外を発生させる&quot;</span> <span class="o">()</span> <span class="o">{</span>
+ 
+        <span class="nl">when:</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">put</span><span class="o">([</span><span class="s1">&#39;aaa&#39;</span><span class="o">:</span><span class="s1">&#39;bbb&#39;</span><span class="o">,(</span><span class="kc">null</span><span class="o">):</span><span class="s1">&#39;ddd&#39;</span><span class="o">])</span>
+ 
+        <span class="nl">then:</span>
+        <span class="n">thrown</span><span class="o">(</span><span class="n">IllegalArgumentException</span><span class="o">)</span>
+        <span class="n">kvs</span><span class="o">.</span><span class="na">dump</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>実行してみましょう。</p>
+<div class="highlight-text"><div class="highlight"><pre>Process finished with exit code 0
+</pre></div>
+</div>
+<p>問題なく動作しているようですね。</p>
+</div>
+<div class="section" id="id15">
+<h2>序、完<a class="headerlink" href="#id15" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>序では、テストコードと製品コードを同一実行環境上で動作する別言語で書いてみました。いかがでしたでしょうか？
+GroovyはJavaに近いコードが書けるので、それほど違和感なく読むことが可能だったのではないでしょうか。</p>
+<p>それでは、次回はTDD 破です。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">TDD 序</a><ul>
+<li><a class="reference internal" href="#keyvaluestorespec-groovy">KeyValueStoreSpec.groovyを作成</a></li>
+<li><a class="reference internal" href="#id1">最初のテストを書く</a></li>
+<li><a class="reference internal" href="#keyvaluestore">KeyValueStoreクラスの作成</a></li>
+<li><a class="reference internal" href="#put">putメソッド作成</a></li>
+<li><a class="reference internal" href="#get">getメソッド作成</a></li>
+<li><a class="reference internal" href="#id2">getの仮実装</a></li>
+<li><a class="reference internal" href="#id3">三角測量</a></li>
+<li><a class="reference internal" href="#id4">明白な実装</a></li>
+<li><a class="reference internal" href="#id5">テストコードのリファクタリング</a></li>
+<li><a class="reference internal" href="#putkeytext">put対象のkeyがtextなら例外発生</a></li>
+<li><a class="reference internal" href="#setup">setupメソッドの抽出</a></li>
+<li><a class="reference internal" href="#gettext">getにtextを渡すと例外発生</a></li>
+<li><a class="reference internal" href="#kvskeygettext">kvsに登録されていないkeyでgetを実行するとtextが返る</a></li>
+<li><a class="reference internal" href="#keyputvalue">既に登録されているkeyに対してputした場合はvalueのみ更新</a></li>
+<li><a class="reference internal" href="#delete">deleteのテスト</a></li>
+<li><a class="reference internal" href="#id6">deleteの実装</a></li>
+<li><a class="reference internal" href="#dump">dumpの実装</a><ul>
+<li><a class="reference internal" href="#id7">dumpのテスト</a></li>
+<li><a class="reference internal" href="#id8">一歩が大きいので小さくする</a></li>
+<li><a class="reference internal" href="#debugprint">debugPrintの実装</a></li>
+<li><a class="reference internal" href="#id9">dumpのテストに戻る</a></li>
+<li><a class="reference internal" href="#id10">改めて、dumpの実装</a></li>
+<li><a class="reference internal" href="#id11">不安なので複数登録されている場合もテスト</a></li>
+<li><a class="reference internal" href="#id12">debugPrintの処遇</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#key-value">一度に複数のkey-valueを登録したい</a></li>
+<li><a class="reference internal" href="#put-map">put(Map)の実装</a></li>
+<li><a class="reference internal" href="#keytext">複数登録する際のkeyに一つでもtextが存在する場合は一切登録せず例外発生</a></li>
+<li><a class="reference internal" href="#id13">登録する前に例外を投げるようにする</a></li>
+<li><a class="reference internal" href="#keyvalue">keyとvalueを任意の型で扱えるようにしたい</a></li>
+<li><a class="reference internal" href="#id14">他の型でもテストしてみよう</a></li>
+<li><a class="reference internal" href="#id15">序、完</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="前の章へ">概要</a></p>
+  <h3>このページ</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/spock_tdd.txt"
+           rel="nofollow">ソースコードを表示</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="introduction.html" title="概要"
+             >前へ</a> |</li>
+        <li><a href="index.html">tdd_jo_ha_q 2012.02.17 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, pocketberserker.
+      このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2 で生成しました。
+    </div>
+  </body>
+</html>

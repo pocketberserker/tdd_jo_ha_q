@@ -1,0 +1,10 @@
+﻿Condition not satisfied:
+
+kvs.get('aaa') == 'bbb'
+|   |          |
+|   null       false
+KeyValueStore@99a6440
+
+at KeyValueStoreSpec.空のKVSにput('aaa','bbb')するとget('aaa')で'bbb'が取得できる(KeyValueStoreSpec.groovy:14)
+
+Process finished with exit code -1

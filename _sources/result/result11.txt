@@ -1,0 +1,3 @@
+﻿Test '.KeyValueStoreSpec.KVSに登録されているkey-valueを文字列で取得できる' ignored
+
+Process finished with exit code 0

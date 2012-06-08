@@ -1,0 +1,5 @@
+﻿groovy.lang.MissingMethodException: No signature of method: KeyValueStore.delete() is applicable for argument types: (java.lang.String) values: [aaa]
+Possible solutions: get(java.lang.String), getAt(java.lang.String), every(), sleep(long), every(groovy.lang.Closure), split(groovy.lang.Closure)
+  at KeyValueStoreSpec.既にKVSに存在するkeyをdeleteするとkeyとvalueのペアがKVSから削除される(KeyValueStoreSpec.groovy:68)
+
+Process finished with exit code -1

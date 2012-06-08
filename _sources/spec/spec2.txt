@@ -1,0 +1,19 @@
+package xutp
+
+import spock.lang.*
++import xutp.KeyValueStore
+
+class KeyValueStoreSpec extends Specification {
+
++    def "‹ó‚ÌKVS‚Éput('aaa','bbb')‚·‚é‚Æget('aaa')‚Å'bbb'‚ªŽæ“¾‚Å‚«‚é" () {
++
++        given:
++        def kvs = new KeyValueStore()
++
++        when:
++        kvs.put('aaa','bbb')
++
++        then:
++        kvs.get('aaa') == 'bbb'
++    }
+}

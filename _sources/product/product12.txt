@@ -1,0 +1,53 @@
+package xutp;
+
+import java.util.Map;
+import java.util.LinkedHashMap;
+
+public class KeyValueStore {
+
+    private final Map<String,String> store = new LinkedHashMap<>();
+
+    public void put(String key, String value) {
+        if(key == null) throw new IllegalArgumentException("key‚ªnull‚Å‚µ‚½");
+        store.put(key,value);
+    }
+
+    public String get(String key) {
+        if(key == null) throw new IllegalArgumentException("key‚ªnull‚Å‚µ‚½");
+        return store.get(key);
+    }
+
+    public void delete(String key) {
+        store.remove(key);
+    }
+
+    private String toString(String key, String value) {
+        StringBuilder result = new StringBuilder();
+        result.append("{");
+        result.append(key);
+        result.append(":");
+        result.append(value);
+        result.append("}");
+        return result.toString();
+    }
+
+    public String dump() {
+        StringBuilder result = new StringBuilder();
+        for(Map.Entry<String,String> pair : store.entrySet()) {
+            String keyvalue = toString(pair.getKey(), pair.getValue());
+            result.append(keyvalue);
+        }
+        return result.toString();
+    }
+
+    public void put(Map<String,String> kv) {
+
++       for(Map.Entry<String,String> pair : kv.entrySet()) {
++           if(pair.getKey() == null) throw new IllegalArgumentException("key‚Énull‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·");
++       }
+
+        for(Map.Entry<String,String> pair : kv.entrySet()) {
+            put(pair.getKey(),pair.getValue());
+        }
+    }
+}

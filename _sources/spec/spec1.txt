@@ -1,0 +1,7 @@
++package xutp
++
++import spock.lang.*
++
++class KeyValueStoreSpec extends Specification {
++
++}

@@ -1,0 +1,2 @@
+platex -kanji=utf8 hogehoge   #hogehogeに拡張子はいらない
+dvipdfmx hogehoge

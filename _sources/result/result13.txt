@@ -1,0 +1,14 @@
+﻿Condition not satisfied:
+
+kvs.dump() == ''
+|   |      |
+|   |      false
+|   |      9 differences (0% similarity)
+|   |      ({aaa:bbb})
+|   |      (---------)
+|   {aaa:bbb}
+KeyValueStore@5dc598b
+
+  at KeyValueStoreSpec.複数keyvalueペアのkeyに一つでもnullが含まれていたらKVSを更新せず例外を発生させる(KeyValueStoreSpec.groovy:140)
+
+Process finished with exit code -1

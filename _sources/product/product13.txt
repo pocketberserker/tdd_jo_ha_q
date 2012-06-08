@@ -1,0 +1,64 @@
+package xutp;
+
+import java.util.Map;
+import java.util.LinkedHashMap;
+
++public class KeyValueStore <K,V> {
+
+-    private final Map<String,String> store = new LinkedHashMap<>();
++    private final Map<K,V> store = new LinkedHashMap<>();
+
+-    public void put(String key, String value) {
++    public void put(K key, V value) {
+        if(key == null) throw new IllegalArgumentException("key‚ªnull‚Å‚µ‚½");
+        store.put(key,value);
+    }
+
+-    public String get(String key) {
++    public V get(K key) {
+        if(key == null) throw new IllegalArgumentException("key‚ªnull‚Å‚µ‚½");
+        return store.get(key);
+    }
+
+-    public void delete(String key) {
++    public void delete(K key) {
+        store.remove(key);
+    }
+
+-   private String toString(String key, String value) {
++   private String toString(K key, V value) {
+        StringBuilder result = new StringBuilder();
+        result.append("{");
+-       result.append(key);
++       result.append(key.toString());
+        result.append(":");
+-       result.append(value);
++       result.append(value.toString());
+        result.append("}");
+        return result.toString();
+    }
+
+    public String dump() {
+        StringBuilder result = new StringBuilder();
+-       for(Map.Entry<String,String> pair : store.entrySet()) {
++       for(Map.Entry<K,V> pair : store.entrySet()) {
+            String keyvalue = toString(pair.getKey(), pair.getValue());
+            result.append(keyvalue);
+        }
+        return result.toString();
+    }
+
+-   public void put(Map<String,String> kv) {
++   public void put(Map<K,V> kv) {
+
+-       for(Map.Entry<String,String> pair : kv.entrySet()) {
++       for(Map.Entry<K,V> pair : kv.entrySet()) {
+            if(pair.getKey() == null) throw new IllegalArgumentException("key‚Énull‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·");
+        }
+
+-       for(Map.Entry<String,String> pair : kv.entrySet()) {
++       for(Map.Entry<K,V> pair : kv.entrySet()) {
+            put(pair.getKey(),pair.getValue());
+        }
+    }
+}

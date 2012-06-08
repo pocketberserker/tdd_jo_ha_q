@@ -1,0 +1,5 @@
+﻿groovy.lang.MissingMethodException: No signature of method: KeyValueStore.put() is applicable for argument types: (java.lang.String, java.lang.String) values: [aaa, bbb]
+Possible solutions: putAt(java.lang.String, java.lang.Object), wait(), dump(), any(), find(), grep()
+  at KeyValueStoreSpec.空のKVSにput('aaa','bbb')するとget('aaa')で'bbb'が取得できる(KeyValueStoreSpec.groovy:11)
+
+Process finished with exit code -1

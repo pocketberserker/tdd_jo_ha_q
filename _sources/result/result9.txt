@@ -1,0 +1,14 @@
+﻿Condition not satisfied:
+
+kvs.dump() == "{aaa:bbb}"
+|   |      |
+|   |      false
+|   |      33 differences (17% similarity)
+|   |      (<KeyV)a(lueStore@66557791 store=[)aa(a):bbb(]>)
+|   |      ({----)a(-------------------------)aa(-):bbb(}-)
+|   <KeyValueStore@66557791 store=[aaa:bbb]>
+KeyValueStore@66557791
+
+at KeyValueStoreSpec.KVSに登録されているkey-valueを文字列で取得できる(KeyValueStoreSpec.groovy:103)
+
+Process finished with exit code -1

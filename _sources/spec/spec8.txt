@@ -1,0 +1,74 @@
+package xutp
+
+import spock.lang.*
+import xutp.KeyValueStore
+
+class KeyValueStoreSpec extends Specification {
+
+    def "空のKVSにkeyとvalueのペアをputするとkeyに対応するvalueがgetできる" () {
+
+		    given:
+				def kvs = new KeyValueStore()
+
+				when:
+				kvs.put(key,value)
+
+				then:
+				kvs.get(key) == value
+
+				where:
+				key   | value
+				'aaa' | 'bbb'
+				'ccc' | 'ddd'
+		}
+
+		def "KVSにnullのkeyをputすると例外が発生する" () {
+
+				given:
+				def kvs = new KeyValueStore()
+
+				when:
+				kvs.put(null,'null')
+
+				then:
+				thrown(IllegalArgumentException)
+		}
+
+		def "KVSに対してnullでgetを行うと例外が発生する" () {
+
+				given:
+				def kvs = new KeyValueStore()
+				kvs.put('aaa','bbb')
+
+				when:
+				kvs.get(null)
+
+				then:
+				thrown(IllegalArgumentException)
+		}
+
+    def "KVSに登録されていないkeyでgetを行うとnullが返る" () {
+
+		    given:
+				def kvs = new KeyValueStore()
+
+				when:
+				kvs.put('aaa','bbb')
+
+				then:
+				kvs.get('other') == null
+		}
+
++		def "既にKVSに存在するkeyをputするとvalueのみ更新される" () {
++
++				given:
++				def kvs = new KeyValueStore()
++				kvs.put('aaa','bbb')
++
++				when:
++				kvs.put('aaa','ccc')
++
++				then:
++				kvs.get('aaa') == 'ccc'
++		}
+}

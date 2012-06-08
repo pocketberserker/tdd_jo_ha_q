@@ -1,0 +1,5 @@
+﻿Expected exception java.lang.IllegalArgumentException, but no exception was thrown
+  at spock.lang.Specification.thrown(Specification.java:232)
+  at KeyValueStoreSpec.KVSに対してnullでgetを行うと例外が発生する(KeyValueStoreSpec.groovy:45)
+
+Process finished with exit code -1

@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>&lt;no title&gt; &mdash; tdd_jo_ha_q 2012.02.17 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2012.02.17',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="top" title="tdd_jo_ha_q 2012.02.17 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li><a href="../index.html">tdd_jo_ha_q 2012.02.17 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <p>package xutp</p>
+<p>import spock.lang.*
+import xutp.KeyValueStore</p>
+<p>class KeyValueStoreSpec extends Specification {</p>
+<blockquote>
+<div><p>def &#8221;???KVS??key??value?̃y?A??put?????key?ɑΉ?????value??get?ł???&#8221; () {</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="docutils">
+<dt>given:</dt>
+<dd><p class="first">def kvs = new KeyValueStore()</p>
+<p>when:
+kvs.put(key,value)</p>
+<p>then:
+kvs.get(key) == value</p>
+<p class="last">where:
+key   | value
+&#8216;aaa&#8217; | &#8216;bbb&#8217;
+&#8216;ccc&#8217; | &#8216;ddd&#8217;</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>}</p>
+<p>def &#8220;KVS??null??key??put????Ɨ?O??????????&#8221; () {</p>
+<blockquote>
+<div><blockquote>
+<div>given:
+def kvs = new KeyValueStore()</div></blockquote>
+<dl class="docutils">
+<dt>when:</dt>
+<dd><p class="first">kvs.put(null,&#8217;null&#8217;)</p>
+<p class="last">then:
+thrown(IllegalArgumentException)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>}</p>
+<p>def &#8220;KVS?ɑ΂???null??get??s???Ɨ?O??????????&#8221; () {</p>
+<blockquote>
+<div><p>given:
+def kvs = new KeyValueStore()
+kvs.put(&#8216;aaa&#8217;,&#8217;bbb&#8217;)</p>
+<p>when:
+kvs.get(null)</p>
+<p>then:
+thrown(IllegalArgumentException)</p>
+</div></blockquote>
+<p>}</p>
+<p>def &#8220;KVS?ɓo?^????Ă??Ȃ?key??get??s????null???Ԃ?&#8221; () {</p>
+<blockquote>
+<div><p>given:
+def kvs = new KeyValueStore()</p>
+<p>when:
+kvs.put(&#8216;aaa&#8217;,&#8217;bbb&#8217;)</p>
+<p>then:
+kvs.get(&#8216;other&#8217;) == null</p>
+</div></blockquote>
+<p>}</p>
+<p>def &#8221;????KVS?ɑ??݂???key??put?????value?̂ݍX?V?????&#8221; () {</p>
+<blockquote>
+<div><p>given:
+def kvs = new KeyValueStore()
+kvs.put(&#8216;aaa&#8217;,&#8217;bbb&#8217;)</p>
+<p>when:
+kvs.put(&#8216;aaa&#8217;,&#8217;ccc&#8217;)</p>
+<p>then:
+kvs.get(&#8216;aaa&#8217;) == &#8216;ccc&#8217;</p>
+</div></blockquote>
+<p>}</p>
+<p>def &#8221;????KVS?ɑ??݂???key?ɂ???delete??s????key??value?̃y?A??KVS????폜?????&#8221; () {</p>
+<blockquote>
+<div><p>given:
+def kvs = new KeyValueStore()
+kvs.put(key,value)</p>
+<p>when:
+kvs.delete(key)</p>
+<p>then:
+kvs.get(key) == null</p>
+<p>where:
+key   | value
+&#8216;aaa&#8217; | &#8216;bbb&#8217;
+&#8216;ccc&#8217; | &#8216;ddd&#8217;</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+</div></blockquote>
+<ul class="simple">
+<li>def &#8220;KVS?ɓo?^????Ă???key-value?𕶎???Ŏ擾?ł???&#8221; () {</li>
+<li></li>
+<li>given:</li>
+<li>def kvs = new KeyValueStore()</li>
+<li></li>
+<li>when:</li>
+<li>kvs.put(&#8216;aaa&#8217;,&#8217;bbb&#8217;)</li>
+<li></li>
+<li>then:</li>
+<li>kvs.dump() == &#8220;{aaa:bbb}&#8221;</li>
+<li>}</li>
+</ul>
+<p>}</p>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>このページ</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/spec/spec11.txt"
+           rel="nofollow">ソースコードを表示</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li><a href="../index.html">tdd_jo_ha_q 2012.02.17 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, pocketberserker.
+      このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2 で生成しました。
+    </div>
+  </body>
+</html>

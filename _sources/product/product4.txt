@@ -1,0 +1,13 @@
+package xutp;
+
+public class KeyValueStore {
+
+    public void put(String key, String value) {
+
+		}
+
+    public String get(String key) {
+-       return null;
++       return "bbb";
+		}
+}

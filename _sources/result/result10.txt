@@ -1,0 +1,6 @@
+﻿Test '.KeyValueStoreSpec.KVSに登録されているkey-value一覧を文字列で取得できる' ignored
+
+groovy.lang.MissingMethodException: No signature of method: KeyValueStore.debugPrint() is applicable for argument types: (java.lang.String, java.lang.String) values: [aaa, bbb]
+  at KeyValueStoreSpec.keyとvalueをdebugPrintに渡すと{key:value}の形で文字列を返す(KeyValueStoreSpec.groovy:98)
+
+Process finished with exit code -1
